@@ -62,12 +62,14 @@ func openDB(dsn string) (*sql.DB, error) {
 
 func connectToDB() *sql.DB {
 	dsn := os.Getenv("DSN")
+	fmt.Println("%s is the dsn string \n")
 
 	for {
 		connection, err := openDB(dsn)
-
+		fmt.Println("%s is the dsn string \n", dsn)
 		if err != nil {
 			log.Println("Postgress not yet ready...")
+			log.Println(err)
 			counts++
 		} else {
 			log.Println("Connected to postgress...")
