@@ -47,22 +47,26 @@ func main() {
 	app := Config{
 		Models: data.New(client),
 	}
-
+	log.Println("Starting service on port", webPort)
 	// start web server
-	go app.serve()
-}
-
-func (app *Config) serve() {
 	srv := &http.Server{
 		Addr:    fmt.Sprintf(":%s", webPort),
 		Handler: app.routes(),
 	}
 
-	err := srv.ListenAndServe()
+	err = srv.ListenAndServe()
 	if err != nil {
 		log.Panic()
 	}
 }
+
+// func (app *Config) serve() {
+// 	srv := &http.Server{
+// 		Addr:    fmt.Sprintf(":%s", webPort),
+// 		Handler: app.routes(),
+// 	}
+
+// }
 
 func connectToMongo() (*mongo.Client, error) {
 
