@@ -40,26 +40,26 @@
     let output = document.getElementById("output");
     let sent = document.getElementById("payload");
     let recevied = document.getElementById("received");
-    
+
     logBtn.addEventListener("click", function() {
-        cont payload = {
-        action : "log", 
-        log: {
-                name: "event", 
-                data: "Some kind of data", 
+        const payload = {
+            action: "log",
+            log: {
+                name: "event",
+                data: "Some kind of data",
             }
         }
-        headers.append("Content-Type", "application/json")
-        const body = {
-            method: "POST", 
-            body: JSON.stringify(payload),  
-            headers: headers, 
 
+        const headers = new Headers();
+        headers.append("Content-Type", "application/json");
+
+        const body = {
+            method: "POST",
+            body: JSON.stringify(payload),
+            headers: headers,
         }
 
-
-    })
-    fetch("http:\/\/localhost:8080/handle", body)
+        fetch("http:\/\/localhost:8080/handle", body)
         .then((response) => response.json())
         .then((data) => {
             sent.innerHTML = JSON.stringify(payload, undefined, 4);
@@ -70,6 +70,10 @@
                 output.innerHTML += `<br><strong>Response from broker service</strong>: ${data.message}`;
             }
         })
+        .catch((error) => {
+            output.innerHTML += "<br><br>Eror: " + error;
+        })        
+    })
 
     authBrokerBtn.addEventListener("click", function() {
 
@@ -77,7 +81,7 @@
             action: "auth",
             auth: {
                 email: "admin@example.com",
-                password: "verysecret!",
+                password: "verysecret",
             }
         }
 
@@ -89,7 +93,7 @@
             body: JSON.stringify(payload),
             headers: headers,
         }
-
+        console.log(body)
         fetch("http:\/\/localhost:8080/handle", body)
         .then((response) => response.json())
         .then((data) => {

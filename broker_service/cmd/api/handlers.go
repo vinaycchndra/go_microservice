@@ -4,7 +4,9 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"log"
 	"net/http"
+	"strconv"
 )
 
 type jsonResponse struct {
@@ -16,7 +18,7 @@ type jsonResponse struct {
 type ReuqestPayload struct {
 	Action string      `json:"action"`
 	Auth   AuthPayload `json:"auth,omitempty"`
-	Log    LogPayload  `json:"auth,omitempty"`
+	Log    LogPayload  `json:"log,omitempty"`
 }
 
 type AuthPayload struct {
@@ -95,12 +97,13 @@ func (app *Config) logItem(w http.ResponseWriter, entry LogPayload) {
 func (app *Config) authenticate(w http.ResponseWriter, a AuthPayload) {
 	// create some  json  we'll send that to the auth microservice
 	jsonData, _ := json.MarshalIndent(a, "", "\t")
-
+	log.Println(jsonData)
 	// call the auth service
 	request, err := http.NewRequest("POST", "http://authentication-service/authenticate", bytes.NewBuffer(jsonData))
 
 	if err != nil {
 		app.errorJson(w, err)
+		log.Println(err)
 	}
 
 	client := &http.Client{}
@@ -108,6 +111,7 @@ func (app *Config) authenticate(w http.ResponseWriter, a AuthPayload) {
 
 	if err != nil {
 		app.errorJson(w, err)
+		log.Println(err)
 	}
 
 	defer response.Body.Close()
@@ -117,7 +121,7 @@ func (app *Config) authenticate(w http.ResponseWriter, a AuthPayload) {
 		app.errorJson(w, errors.New("invalid credentials"))
 		return
 	} else if response.StatusCode != http.StatusAccepted {
-		app.errorJson(w, errors.New("error calling auth service"))
+		app.errorJson(w, errors.New(strconv.FormatInt(int64(response.StatusCode), 10)))
 		return
 	}
 

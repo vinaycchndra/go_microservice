@@ -91,7 +91,9 @@ func (u *User) GetByEmail(email string) (*User, error) {
 
 	var user User
 	row := db.QueryRowContext(ctx, query, email)
-
+	log.Println(email)
+	log.Println("Quering for this email")
+	log.Println(row)
 	err := row.Scan(
 		&user.ID,
 		&user.Email,

@@ -2,3 +2,5 @@
 authApp
 \pgadmin-data
 front-end/frontApp.exe
+broker_service/brokerApp
+front-end/frontApp.exe
