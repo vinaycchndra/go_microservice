@@ -6,3 +6,5 @@ broker_service/brokerApp
 front-end/frontApp.exe
 mail-service/go.sum
 mail-service/go.mod
+mail-service/mailerApp
+logger-service/loggerServiceApp
